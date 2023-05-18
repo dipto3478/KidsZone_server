@@ -54,6 +54,21 @@ async function run() {
       const result = await kidsZoneCollection.find(query).toArray();
       res.send(result);
     });
+    // update product
+    app.patch("/mytoys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const data = req.body;
+      const updateDoc = {
+        $set: {
+          price: data.price,
+          quantity: data.quantity,
+          description: data.description,
+        },
+      };
+      const result = await kidsZoneCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
