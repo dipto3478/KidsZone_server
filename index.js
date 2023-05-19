@@ -27,6 +27,9 @@ async function run() {
     const kidsZoneCollection = client
       .db("kidsZoneProduct")
       .collection("products");
+
+    const result = await kidsZoneCollection.createIndex({ productName: 1 });
+    console.log(result);
     // upload product
     app.post("/upload", async (req, res) => {
       const data = req.body;
@@ -35,7 +38,7 @@ async function run() {
     });
     // get all products
     app.get("/products", async (req, res) => {
-      const result = await kidsZoneCollection.find().toArray();
+      const result = await kidsZoneCollection.find().limit(20).toArray();
       res.send(result);
     });
     // get product by id
@@ -45,15 +48,27 @@ async function run() {
       const result = await kidsZoneCollection.findOne(query);
       res.send(result);
     });
+    // search by product name
+    app.get("/search", async (req, res) => {
+      const text = req.query.text;
+      const query = { productName: { $regex: text } };
+      const result = await kidsZoneCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // get user by email
     app.get("/mytoys", async (req, res) => {
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
       }
-      const result = await kidsZoneCollection.find(query).toArray();
+      const result = await kidsZoneCollection
+        .find(query)
+        .sort({ price: -1 })
+        .toArray();
       res.send(result);
     });
+    // tab product show
     app.get("/tab/:category", async (req, res) => {
       const category = req.params.category;
       const query = { sub_category: category };
