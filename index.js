@@ -54,6 +54,12 @@ async function run() {
       const result = await kidsZoneCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/tab/:category", async (req, res) => {
+      const category = req.params.category;
+      const query = { sub_category: category };
+      const result = await kidsZoneCollection.find(query).toArray();
+      res.send(result);
+    });
     // update product
     app.patch("/mytoys/:id", async (req, res) => {
       const id = req.params.id;
