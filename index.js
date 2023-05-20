@@ -28,8 +28,6 @@ async function run() {
       .db("kidsZoneProduct")
       .collection("products");
 
-    const result = await kidsZoneCollection.createIndex({ productName: 1 });
-    console.log(result);
     // upload product
     app.post("/upload", async (req, res) => {
       const data = req.body;
@@ -49,6 +47,8 @@ async function run() {
       res.send(result);
     });
     // search by product name
+    const result = await kidsZoneCollection.createIndex({ productName: 1 });
+    console.log(result);
     app.get("/search", async (req, res) => {
       const text = req.query.text;
       const query = { productName: { $regex: text } };
@@ -116,3 +116,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+module.exports = app;
