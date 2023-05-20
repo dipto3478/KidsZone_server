@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    client.connect();
     const kidsZoneCollection = client
       .db("kidsZoneProduct")
       .collection("products");
@@ -59,7 +59,7 @@ async function run() {
     // get user by email
     app.get("/mytoys", async (req, res) => {
       let query = {};
-      if (req.query?.email) {
+      if (req.query.email) {
         query = { email: req.query.email };
       }
       const result = await kidsZoneCollection
